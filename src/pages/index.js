@@ -24,7 +24,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
-import { DataGrid } from '@mui/x-data-grid';
+import Snackbar from '@mui/material/Snackbar';
 
 export default function Home() {
   const [vendors, setVendors] = useState([]);
@@ -34,6 +34,7 @@ export default function Home() {
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '' });
 
   const handleKeyDown = ( event ) => {
     // update search term
@@ -70,6 +71,8 @@ export default function Home() {
       if (res.ok) {
         // Remove the deleted vendor from the state
         setVendors(vendors.filter((vendor) => vendor.id !== selectedVendorId));
+        //Add snackbar when a vendor is deleted
+        setSnackbar({ open: true, message: 'Vendor deleted successfully' });
         handleClose();
       } else {
         console.error('Failed to delete the vendor.');
@@ -154,12 +157,27 @@ export default function Home() {
                   { key: 'phone', label: 'Phone' },
                   { key: 'address', label: 'Address' },
                 ].map((col) => (
-                  <TableCell
-                    key={col.key}
-                    sx={{ cursor: col.key !== 'id' ? 'pointer' : 'default' }}
-                    onClick={() => col.key !== 'id' && toggleSort(col.key)}
-                  >
-                    <strong>{col.label}</strong>
+                  <TableCell key={col.key}>
+                    <Box
+                      onClick={() => col.key !== 'id' && toggleSort(col.key)}
+                      sx={{
+                        cursor: col.key !== 'id' ? 'pointer' : 'default',
+                        display: 'flex',
+                        alignItems: 'center',
+                        userSelect: 'none',
+                        py: 1,
+                        width: 'fit-content',
+                      }}
+                    >
+                      <Typography variant="subtitle2" fontWeight="bold" sx={{ mr: 0.5 }}>
+                        {col.label}
+                      </Typography>
+                      {sortConfig.key === col.key && (
+                        <Typography variant="subtitle2" fontWeight="bold">
+                          {sortConfig.direction === 'asc' ? '↑' : '↓'}
+                        </Typography>
+                      )}
+                    </Box>
                   </TableCell>
                 ))}
                 <TableCell><strong>Actions</strong></TableCell>
@@ -237,6 +255,13 @@ export default function Home() {
           </DialogActions>
         </Dialog>
       </Box>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        message={snackbar.message}
+      />
     </Container>
+    
   );
 }
