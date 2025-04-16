@@ -3,23 +3,24 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import Header from "../components/Header";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
-      light: '#4791db',
-      dark: '#115293',
+      main: '#4a9f60',
+      light: '#81C784',
+      dark: '#388E3C',
       contrastText: '#fff',
     },
     secondary: {
-      main: '#dc004e',
-      light: '#e33371',
-      dark: '#9a0036',
+      main: '#8D6E63',
+      light: '#BCAAA4',
+      dark: '#5D4037',
       contrastText: '#fff',
     },
     background: {
-      default: '#f5f5f5',
+      default: '#f1f8f4',
       paper: '#ffffff',
     },
   },
@@ -72,6 +73,7 @@ export default function MyApp(props) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <Header />
         <Component {...pageProps} />
       </ThemeProvider>
     </React.Fragment>
