@@ -5,12 +5,14 @@ import {
   Container,
   Typography,
   TextField,
+  Alert,
   Button,
   Box,
   Paper,
-  Grid2,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import InputMask from 'react-input-mask';
+
 
 
 
@@ -22,6 +24,8 @@ export default function AddVendor() {
     phone: '',
     address: '',
   });
+  const [errors, setErrors] = useState({});
+
 
   const router = useRouter();
 
@@ -31,6 +35,38 @@ export default function AddVendor() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const newErrors = {};
+    let hasError = false;
+  
+    // Required: name must be filled
+    if (!vendor.name.trim()) {
+      newErrors.name = 'Name is required';
+      hasError = true;
+    }
+  
+    // Makes sure one of the contact forms is filled
+    const hasSecondaryInfo =
+      vendor.email.trim() ||
+      vendor.phone.trim() ||
+      vendor.address.trim();
+  
+    if (!hasSecondaryInfo) {
+      newErrors.contact = ' ';
+      newErrors.email = ' ';
+      newErrors.phone = ' ';
+      newErrors.address = ' ';
+      hasError = true;
+    }
+  
+    if (hasError) {
+      setErrors(newErrors);
+      return;
+    }
+  
+    // Clear errors if all is valid
+    setErrors({});
+
     const res = await fetch('/api/vendors', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -57,19 +93,44 @@ export default function AddVendor() {
         <Typography variant="h4" component="h1" gutterBottom>
           Add New Vendor
         </Typography>
+        {Object.keys(errors).length > 0 && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            Please complete the required fields. At least one method of contact is required.
+          </Alert>
+        )}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: -2}}>
-            {['name', 'contact', 'email', 'phone', 'address'].map((field) => (
+            {['name', 'contact', 'email', 'address'].map((field) => (
                 <TextField
                   fullWidth
-                  required
+                  required={field === 'name'}
                   label={field.charAt(0).toUpperCase() + field.slice(1)}
                   name={field}
                   type={field === 'email' ? 'email' : 'text'}
                   value={vendor[field]}
                   onChange={handleChange}
+                  error={!!errors[field]}
+                  helperText={errors[field]}
                   sx={{ mt: 3}}
                 />
             ))}
+            <InputMask
+              mask="(999) 999-9999"
+              value={vendor.phone}
+              onChange={handleChange}
+            >
+              {(inputProps) => (
+                <TextField
+                  {...inputProps}
+                  fullWidth
+                  required
+                  margin="normal"
+                  label="Phone"
+                  name="phone"
+                  error={!!errors.phone}
+                  helperText={errors.phone}
+                />
+              )}
+            </InputMask>
               <Button
                 type="submit"
                 fullWidth
