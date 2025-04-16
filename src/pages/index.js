@@ -24,6 +24,18 @@ export default function Home() {
   const [vendors, setVendors] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedVendorId, setSelectedVendorId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedVendors, setSelectedVendors] = useState([]);
+
+  const handleKeyDown = ( event ) => {
+    // update search term
+    // setSearchTerm()
+
+  }
+
+  useEffect(() => {
+    // setSelectedVendors([..., searched vendors])
+  }, [searchTerm]);
 
   useEffect(() => {
     fetch('/api/vendors')
