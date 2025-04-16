@@ -8,8 +8,9 @@ import {
   Button,
   Box,
   Paper,
-  Grid2
+  Grid2,
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export default function AddVendor() {
   const [vendor, setVendor] = useState({
@@ -40,14 +41,22 @@ export default function AddVendor() {
 
   return (
     <Container maxWidth="sm">
+      {/* Back button added. */}
+      <Button
+        startIcon={<ArrowBackIcon />}
+        onClick={() => router.push('/')}
+        variant="text"
+        color="secondary"
+        sx={{ mt: 4, mb: 1, display: 'flex', justifyContent: 'flex-start' }}
+        >
+          Back to Dashboard
+      </Button>
       <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Add New Vendor
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <Grid2 container spacing={2}>
+        <Box component="form" onSubmit={handleSubmit} noValidate>
             {['name', 'contact', 'email', 'phone', 'address'].map((field) => (
-              <Grid2 item xs={12} key={field}>
                 <TextField
                   fullWidth
                   required
@@ -57,9 +66,7 @@ export default function AddVendor() {
                   value={vendor[field]}
                   onChange={handleChange}
                 />
-              </Grid2>
             ))}
-            <Grid2 item xs={12}>
               <Button
                 type="submit"
                 fullWidth
@@ -69,7 +76,6 @@ export default function AddVendor() {
               >
               Add Vendor
               </Button>
-            </Grid2>
           {/* <TextField
             margin="normal"
             required
@@ -123,7 +129,6 @@ export default function AddVendor() {
             color="primary"
             sx={{ mt: 3, mb: 2 }}
           > */}
-          </Grid2>
         </Box>
       </Paper>
     </Container>
