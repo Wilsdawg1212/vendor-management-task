@@ -198,7 +198,7 @@ export default function Home() {
               color="primary"
               startIcon={<DownloadIcon />}
               onClick={handleExportCSV}
-              sx={{ml: 2, }}
+              sx={{ml: 1, }}
             >
               Export as CSV
             </Button>
