@@ -7,6 +7,8 @@ import {
   TextField,
   Button,
   Box,
+  Paper,
+  Grid2
 } from '@mui/material';
 
 export default function AddVendor() {
@@ -38,66 +40,92 @@ export default function AddVendor() {
 
   return (
     <Container maxWidth="sm">
-      <Typography variant="h4" component="h1" gutterBottom>
-        Add New Vendor
-      </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Name"
-          name="name"
-          value={vendor.name}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Contact"
-          name="contact"
-          value={vendor.contact}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Email"
-          name="email"
-          type="email"
-          value={vendor.email}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Phone"
-          name="phone"
-          value={vendor.phone}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Address"
-          name="address"
-          value={vendor.address}
-          onChange={handleChange}
-        />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          Add Vendor
-        </Button>
-      </Box>
+      <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Add New Vendor
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Grid2 container spacing={2}>
+            {['name', 'contact', 'email', 'phone', 'address'].map((field) => (
+              <Grid2 item xs={12} key={field}>
+                <TextField
+                  fullWidth
+                  required
+                  label={field.charAt(0).toUpperCase() + field.slice(1)}
+                  name={field}
+                  type={field === 'email' ? 'email' : 'text'}
+                  value={vendor[field]}
+                  onChange={handleChange}
+                />
+              </Grid2>
+            ))}
+            <Grid2 item xs={12}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                sx={{ mt: 2 }}
+              >
+              Add Vendor
+              </Button>
+            </Grid2>
+          {/* <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Name"
+            name="name"
+            value={vendor.name}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Contact"
+            name="contact"
+            value={vendor.contact}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Email"
+            name="email"
+            type="email"
+            value={vendor.email}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Phone"
+            name="phone"
+            value={vendor.phone}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Address"
+            name="address"
+            value={vendor.address}
+            onChange={handleChange}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3, mb: 2 }}
+          > */}
+          </Grid2>
+        </Box>
+      </Paper>
     </Container>
   );
 }
