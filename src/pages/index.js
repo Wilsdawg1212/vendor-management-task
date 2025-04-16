@@ -156,6 +156,8 @@ export default function Home() {
     document.body.removeChild(link);
   };
 
+  const selectedVendor = vendors.find(v => v.id === selectedVendorId);
+
 
 
   return (
@@ -266,7 +268,14 @@ export default function Home() {
                   <TableCell>{vendor.id}</TableCell>
                   <TableCell>{vendor.name}</TableCell>
                   <TableCell>{vendor.contact}</TableCell>
-                  <TableCell>{vendor.email}</TableCell>
+                  <TableCell>
+                    <Typography
+                      component="a"
+                      href={`mailto:${vendor.email}`}
+                      sx={{ textDecoration: 'underline', color: 'primary.main' }}>
+                      {vendor.email}
+                    </Typography>
+                  </TableCell>
                   <TableCell>{vendor.phone}</TableCell>
                   <TableCell>{vendor.address}</TableCell>
                   <TableCell>
@@ -319,7 +328,7 @@ export default function Home() {
           <DialogTitle id="alert-dialog-title">{"Delete Vendor"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Are you sure you want to delete this vendor? This action cannot be undone.
+              Are you sure you want to delete {selectedVendor?.name || 'this vendor'}? This action cannot be undone.
             </DialogContentText>
           </DialogContent>
           <DialogActions>

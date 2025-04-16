@@ -12,6 +12,8 @@ import {
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
+
+
 export default function AddVendor() {
   const [vendor, setVendor] = useState({
     name: '',
@@ -77,59 +79,6 @@ export default function AddVendor() {
               >
               Add Vendor
               </Button>
-          {/* <TextField
-            margin="normal"
-            required
-            fullWidth
-            label="Name"
-            name="name"
-            value={vendor.name}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            label="Contact"
-            name="contact"
-            value={vendor.contact}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            label="Email"
-            name="email"
-            type="email"
-            value={vendor.email}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            label="Phone"
-            name="phone"
-            value={vendor.phone}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            label="Address"
-            name="address"
-            value={vendor.address}
-            onChange={handleChange}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            sx={{ mt: 3, mb: 2 }}
-          > */}
         </Box>
       </Paper>
     </Container>
