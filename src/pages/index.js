@@ -10,6 +10,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
   Paper,
   IconButton,
@@ -23,13 +24,16 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
+import { DataGrid } from '@mui/x-data-grid';
 
 export default function Home() {
   const [vendors, setVendors] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedVendorId, setSelectedVendorId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedVendors, setSelectedVendors] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleKeyDown = ( event ) => {
     // update search term
@@ -77,6 +81,40 @@ export default function Home() {
     }
   };
 
+  //Function to sort in a given order
+  const toggleSort = (key) => {
+    setSortConfig((prev) => ({
+      key,
+      direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc',
+    }));
+  };
+
+  const filteredVendors = vendors.filter((v) =>
+    [v.name, v.contact, v.email]
+    .some((field) => field.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  const sortedVendors = [...filteredVendors].sort((a, b) => {
+    const direction = sortConfig.direction === 'asc' ? 1 : -1;
+    return a[sortConfig.key].localeCompare(b[sortConfig.key]) * direction;
+  });
+
+  const paginatedVendors = sortedVendors.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+
+
   return (
     <Container>
       <Box sx={{ mt: 4, mb: 4 }}>
@@ -108,19 +146,27 @@ export default function Home() {
             <TableHead>
               {/* This below edit is to improve mobile experience */}
               <TableRow>
-                {['ID', 'Name', 'Contact', 'Email', 'Phone', 'Address', 'Actions'].map((header) => (
-                  <TableCell key={header}>
-                    <strong>{header}</strong>
+                {[
+                  { key: 'id', label: 'ID' },
+                  { key: 'name', label: 'Name' },
+                  { key: 'contact', label: 'Contact' },
+                  { key: 'email', label: 'Email' },
+                  { key: 'phone', label: 'Phone' },
+                  { key: 'address', label: 'Address' },
+                ].map((col) => (
+                  <TableCell
+                    key={col.key}
+                    sx={{ cursor: col.key !== 'id' ? 'pointer' : 'default' }}
+                    onClick={() => col.key !== 'id' && toggleSort(col.key)}
+                  >
+                    <strong>{col.label}</strong>
                   </TableCell>
                 ))}
+                <TableCell><strong>Actions</strong></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {(searchTerm ? vendors.filter(v =>
-                v.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                v.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                v.contact.toLowerCase().includes(searchTerm.toLowerCase())
-              ) : vendors).map((vendor) => (
+              {paginatedVendors.map((vendor) => (
                 <TableRow key={vendor.id}>
                   <TableCell>{vendor.id}</TableCell>
                   <TableCell>{vendor.name}</TableCell>
@@ -148,15 +194,24 @@ export default function Home() {
                   </TableCell>
                 </TableRow>
               ))}
-              {vendors.length === 0 && (
+              {paginatedVendors.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={7} align="center">
-                    No vendors available.
+                    No vendors found.
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
+            <TablePagination
+            component="div"
+            count={sortedVendors.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
+            />
         </TableContainer>
 
         {/* Confirmation Dialog */}
