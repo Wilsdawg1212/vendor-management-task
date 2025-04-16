@@ -4,6 +4,7 @@ import {
   Container,
   Typography,
   Button,
+  Box,
   Table,
   TableBody,
   TableCell,
@@ -75,89 +76,90 @@ export default function Home() {
 
   return (
     <Container>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Vendor Management System
-      </Typography>
-      <Link href="/add" passHref>
-        <Button variant="contained" color="primary" style={{ marginBottom: '20px' }}>
-          Add Vendor
-        </Button>
-      </Link>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell><strong>ID</strong></TableCell>
-              <TableCell><strong>Name</strong></TableCell>
-              <TableCell><strong>Contact</strong></TableCell>
-              <TableCell><strong>Email</strong></TableCell>
-              <TableCell><strong>Phone</strong></TableCell>
-              <TableCell><strong>Address</strong></TableCell>
-              <TableCell><strong>Actions</strong></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {vendors.map((vendor) => (
-              <TableRow key={vendor.id}>
-                <TableCell>{vendor.id}</TableCell>
-                <TableCell>{vendor.name}</TableCell>
-                <TableCell>{vendor.contact}</TableCell>
-                <TableCell>{vendor.email}</TableCell>
-                <TableCell>{vendor.phone}</TableCell>
-                <TableCell>{vendor.address}</TableCell>
-                <TableCell>
-                  <Link href={`/edit/${vendor.id}`} passHref>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      size="small"
-                      style={{ marginRight: '10px' }}
-                    >
-                      Edit
-                    </Button>
-                  </Link>
-                  <IconButton
-                    color="secondary"
-                    onClick={() => handleClickOpen(vendor.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-            {vendors.length === 0 && (
+      <Box sx={{ mt: 4, mb: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Vendor Management System
+        </Typography>
+        <Link href="/add" passHref>
+          <Button variant="contained" color="primary" style={{ marginBottom: '20px' }}>
+            Add Vendor
+          </Button>
+        </Link>
+        <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+          <Table>
+            <TableHead>
+              {/* This below edit is to improve mobile experience */}
               <TableRow>
-                <TableCell colSpan={7} align="center">
-                  No vendors available.
-                </TableCell>
+                {['ID', 'Name', 'Contact', 'Email', 'Phone', 'Address', 'Actions'].map((header) => (
+                  <TableCell key={header}>
+                    <strong>{header}</strong>
+                  </TableCell>
+                ))}
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {vendors.map((vendor) => (
+                <TableRow key={vendor.id}>
+                  <TableCell>{vendor.id}</TableCell>
+                  <TableCell>{vendor.name}</TableCell>
+                  <TableCell>{vendor.contact}</TableCell>
+                  <TableCell>{vendor.email}</TableCell>
+                  <TableCell>{vendor.phone}</TableCell>
+                  <TableCell>{vendor.address}</TableCell>
+                  <TableCell>
+                    <Link href={`/edit/${vendor.id}`} passHref>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        style={{ marginRight: '10px' }}
+                      >
+                        Edit
+                      </Button>
+                    </Link>
+                    <IconButton
+                      color="secondary"
+                      onClick={() => handleClickOpen(vendor.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {vendors.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={7} align="center">
+                    No vendors available.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-      {/* Confirmation Dialog */}
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Delete Vendor"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete this vendor? This action cannot be undone.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDelete} color="secondary" autoFocus>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+        {/* Confirmation Dialog */}
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Delete Vendor"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete this vendor? This action cannot be undone.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleDelete} color="secondary" autoFocus>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
     </Container>
   );
 }
