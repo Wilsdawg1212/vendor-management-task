@@ -8,6 +8,7 @@ import {
   Button,
   Box,
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export default function EditVendor() {
   const router = useRouter();
@@ -53,6 +54,15 @@ export default function EditVendor() {
 
   return (
     <Container maxWidth="sm">
+      <Button
+        startIcon={<ArrowBackIcon />}
+        onClick={() => router.push('/')}
+        variant="text"
+        color="secondary"
+        sx={{ mt: 4, mb: 1, display: 'flex', justifyContent: 'flex-start' }}
+        >
+          Back to Table
+      </Button>
       <Typography variant="h4" component="h1" gutterBottom>
         Edit Vendor
       </Typography>
