@@ -39,7 +39,7 @@ export default function AddVendor() {
     const newErrors = {};
     let hasError = false;
   
-    // Required: name must be filled
+    // Makes sure that the name element is filled
     if (!vendor.name.trim()) {
       newErrors.name = 'Name is required';
       hasError = true;
@@ -114,6 +114,7 @@ export default function AddVendor() {
                 />
             ))}
             <InputMask
+              //Might want to change this mask considering other countries have different phone numbers
               mask="(999) 999-9999"
               value={vendor.phone}
               onChange={handleChange}

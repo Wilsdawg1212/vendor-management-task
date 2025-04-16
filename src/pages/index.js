@@ -38,15 +38,7 @@ export default function Home() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [snackbar, setSnackbar] = useState({ open: false, message: '' });
 
-  const handleKeyDown = ( event ) => {
-    // update search term
-    // setSearchTerm()
 
-  }
-
-  useEffect(() => {
-    // setSelectedVendors([..., searched vendors])
-  }, [searchTerm]);
 
   useEffect(() => {
     fetch('/api/vendors')
