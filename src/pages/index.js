@@ -25,13 +25,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import Snackbar from '@mui/material/Snackbar';
+import DownloadIcon from '@mui/icons-material/Download';
+
 
 export default function Home() {
   const [vendors, setVendors] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedVendorId, setSelectedVendorId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
+  const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'asc' });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [snackbar, setSnackbar] = useState({ open: false, message: '' });
@@ -98,8 +100,17 @@ export default function Home() {
   );
 
   const sortedVendors = [...filteredVendors].sort((a, b) => {
+    const key = sortConfig.key;
     const direction = sortConfig.direction === 'asc' ? 1 : -1;
-    return a[sortConfig.key].localeCompare(b[sortConfig.key]) * direction;
+  
+    const aValue = a[key];
+    const bValue = b[key];
+  
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return aValue.localeCompare(bValue) * direction;
+    } else {
+      return (aValue > bValue ? 1 : -1) * direction;
+    }
   });
 
   const paginatedVendors = sortedVendors.slice(
@@ -116,6 +127,35 @@ export default function Home() {
     setPage(0);
   };
 
+  const handleExportCSV = () => {
+    const headers = ['ID', 'Name', 'Contact', 'Email', 'Phone', 'Address', 'Category'];
+    const rows = sortedVendors.map((v) => [
+      v.id,
+      v.name,
+      v.contact,
+      v.email,
+      v.phone,
+      v.address,
+      v.category || '',
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map((r) =>
+        r.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+      ),
+    ].join('\n');
+  
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'vendors.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
 
 
   return (
@@ -124,26 +164,61 @@ export default function Home() {
         <Typography variant="h4" component="h1" gutterBottom>
           Vendor Management System
         </Typography>
-        <Link href="/add" passHref>
-          <Button variant="contained" color="primary" style={{ marginBottom: '20px' }}>
-            Add Vendor
-          </Button>
-        </Link>
-        <TextField
-          fullWidth
-          placeholder="Search vendors by name, email, or contact"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          variant="outlined"
-          sx={{ mb: 2 }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 2,
+            mb: 2,
           }}
-        />
+        >
+          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setSortConfig({ key: 'id', direction: 'asc' });
+                setSearchTerm('');
+                setPage(0);
+              }}
+              sx={{ mb: 2, ml: 1 }}
+            >
+            Reset Table View
+            </Button>
+            <Link href="/add" passHref>
+              <Button variant="contained" color="primary" sx={{ mb: 2, ml: 1 }} justify-content="left">
+                Add Vendor
+              </Button>
+            </Link>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              startIcon={<DownloadIcon />}
+              onClick={handleExportCSV}
+              sx={{ml: 2, }}
+            >
+              Export as CSV
+            </Button>
+          </Box>
+          <TextField
+            fullWidth
+            placeholder="Search vendors by name, email, or contact"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            variant="outlined"
+            sx={{ mb: 2 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
         <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
           <Table>
             <TableHead>
@@ -172,7 +247,7 @@ export default function Home() {
                       <Typography variant="subtitle2" fontWeight="bold" sx={{ mr: 0.5 }}>
                         {col.label}
                       </Typography>
-                      {sortConfig.key === col.key && (
+                      {sortConfig.key === col.key && col.key !== 'id' && (
                         <Typography variant="subtitle2" fontWeight="bold">
                           {sortConfig.direction === 'asc' ? '↑' : '↓'}
                         </Typography>
@@ -180,7 +255,9 @@ export default function Home() {
                     </Box>
                   </TableCell>
                 ))}
-                <TableCell><strong>Actions</strong></TableCell>
+                <TableCell>
+                  <strong>Actions</strong>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

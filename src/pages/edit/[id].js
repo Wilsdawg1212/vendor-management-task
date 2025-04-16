@@ -7,6 +7,7 @@ import {
   TextField,
   Button,
   Box,
+  Paper,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
@@ -63,66 +64,68 @@ export default function EditVendor() {
         >
           Back to Table
       </Button>
+      <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
         Edit Vendor
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Name"
-          name="name"
-          value={vendor.name}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Contact"
-          name="contact"
-          value={vendor.contact}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Email"
-          name="email"
-          type="email"
-          value={vendor.email}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Phone"
-          name="phone"
-          value={vendor.phone}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="Address"
-          name="address"
-          value={vendor.address}
-          onChange={handleChange}
-        />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          Update Vendor
-        </Button>
-      </Box>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Name"
+            name="name"
+            value={vendor.name}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Contact"
+            name="contact"
+            value={vendor.contact}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Email"
+            name="email"
+            type="email"
+            value={vendor.email}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Phone"
+            name="phone"
+            value={vendor.phone}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Address"
+            name="address"
+            value={vendor.address}
+            onChange={handleChange}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Update Vendor
+          </Button>
+        </Box>
+      </Paper>
     </Container>
   );
 }
