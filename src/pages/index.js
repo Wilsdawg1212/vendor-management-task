@@ -18,8 +18,11 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  TextField,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
 
 export default function Home() {
   const [vendors, setVendors] = useState([]);
@@ -85,6 +88,21 @@ export default function Home() {
             Add Vendor
           </Button>
         </Link>
+        <TextField
+          fullWidth
+          placeholder="Search vendors by name, email, or contact"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          variant="outlined"
+          sx={{ mb: 2 }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
         <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
           <Table>
             <TableHead>
@@ -98,7 +116,11 @@ export default function Home() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {vendors.map((vendor) => (
+              {(searchTerm ? vendors.filter(v =>
+                v.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                v.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                v.contact.toLowerCase().includes(searchTerm.toLowerCase())
+              ) : vendors).map((vendor) => (
                 <TableRow key={vendor.id}>
                   <TableCell>{vendor.id}</TableCell>
                   <TableCell>{vendor.name}</TableCell>

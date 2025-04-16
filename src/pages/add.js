@@ -49,13 +49,13 @@ export default function AddVendor() {
         color="secondary"
         sx={{ mt: 4, mb: 1, display: 'flex', justifyContent: 'flex-start' }}
         >
-          Back to Dashboard
+          Back to Table
       </Button>
       <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Add New Vendor
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: -2}}>
             {['name', 'contact', 'email', 'phone', 'address'].map((field) => (
                 <TextField
                   fullWidth
@@ -65,6 +65,7 @@ export default function AddVendor() {
                   type={field === 'email' ? 'email' : 'text'}
                   value={vendor[field]}
                   onChange={handleChange}
+                  sx={{ mt: 3}}
                 />
             ))}
               <Button
@@ -72,7 +73,7 @@ export default function AddVendor() {
                 fullWidth
                 variant="contained"
                 color="primary"
-                sx={{ mt: 2 }}
+                sx={{ mt: 4 }}
               >
               Add Vendor
               </Button>
